@@ -1,17 +1,25 @@
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useContext, useEffect, useState  } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import { AppContext } from '../../context/AppContext'
+import axios from 'axios'
 
-import { professionals } from '../../assets/assets'
+import { useAuthStore } from '../../store/authStore'
 
 import Navbar from '../../components/Navbar'
 import RelatedProfessionals from '../../components/RelatedProfessionals'
 import Footer from '../../components/Footer'
 
 import { Info } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 
 const Appointment = () => {
+  const navigate = useNavigate()
+
   const { professionalId } = useParams()
+  const {professionals, currencySymbol, token, getProfessionalData} = useContext(AppContext)
+
+  const { user } = useAuthStore()
   const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT']
 
   const [proInfo, setProInfo] = useState(null)
@@ -24,9 +32,9 @@ const Appointment = () => {
     const professionalInfo = professionals.find(pro => pro._id === professionalId)
     setProInfo(professionalInfo)
   }
-
+  
   const getAvailableSlots = async () => {
-    if (!proInfo) return; // Check if docInfo is available
+    if (!proInfo) return; // Check if proInfo is available
   
     setProSlot([])
     
@@ -76,6 +84,35 @@ const Appointment = () => {
     }
   }
 
+  console.log('User: ', user)
+
+  const bookAppointment = async () => {
+    if (!token) {
+      toast('Please login to book an appointment!')
+      return navigate('/account-type')
+    }
+
+    try {
+      const date = proSlot[slotIndex][0].dateTime
+      let day = date.getDate()
+      let month = date.getMonth() + 1
+      let year = date.getFullYear()
+
+      const slotDate = day + "_" + month + "_" + year
+
+      const { data } = await axios.post('http://localhost:5000/api/user/book-appointment', { professionalId, slotDate, slotTime, reasonForBooking }, { headers: { token }})
+      if (data.success) {
+        toast.success(data.message)
+        getProfessionalsData()
+        navigate('/user/my-appointments')
+      }
+    
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
+  }
+
   useEffect(() => {
     fetchProfessionalInfo()
   }, [professionals, proInfo])
@@ -97,7 +134,7 @@ const Appointment = () => {
           <div>
             <img
               className='bg-green-200 w-full sm:max-w-72 rounded-lg' 
-              src={ proInfo.profilePic } 
+              src={ proInfo.image } 
               alt="profilePic" 
             />
           </div>
@@ -151,7 +188,7 @@ const Appointment = () => {
             />
           </div>
 
-          <button className='bg-green-500 text-white font-medium hover:scale-110 hover:bg-emerald-700 text-sm font-light px-14 py-3 rounded-full my-6 transition-all duration-500'>Book a consultation</button>
+          <button onClick={bookAppointment} className='bg-green-500 text-white font-medium hover:scale-110 hover:bg-emerald-700 text-sm font-light px-14 py-3 rounded-full my-6 transition-all duration-500'>Book a consultation</button>
         </div>
 
         <RelatedProfessionals 

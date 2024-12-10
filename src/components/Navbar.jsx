@@ -11,10 +11,6 @@ const Navbar = () => {
 
   const { user, logout } = useAuthStore()
 
-  // const logout = () => {
-  //   setToken(false)
-  // }
-
   return (
     <div className='mx-4 sm:mx-[10%]'>
       
@@ -48,7 +44,7 @@ const Navbar = () => {
           {
             user 
               ? <div className='flex items-center cursor-pointer group relative '>
-                  <img className='w-8 rounded-full' src={ user.profilePic } alt="profilePic" />
+                  <img className='w-8 rounded-full' src={ user.image } alt="profilePic" />
                   {/* <img className='w-8 rounded-full' src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="profilePic" /> */}
                   <ChevronsDown className='w-5' />
                   <div className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 hidden group-hover:block bg-gray-400 bg-opacity-5 backdrop-filter rounded-xl shadow-2xl border border-white border-opacity-5'>
@@ -63,14 +59,14 @@ const Navbar = () => {
                       </div>
                       <div 
                         className='flex text-white hover:text-green-500 hover:scale-105 transition-all duration-500 cursor-pointer'
-                        onClick={ () => navigate('/my-appointments') }
+                        onClick={ () => navigate('/user/my-appointments') }
                       >
                         <Calendar className='mr-2' />
                         <p>Appointments</p>
                       </div>
                       <div 
                         className='flex text-white hover:text-green-500 hover:scale-105 transition-all duration-500 cursor-pointer'
-                        onClick={ () => navigate('/my-messages') }
+                        onClick={ () => navigate('/user/my-messages') }
                       >
                         <MessageSquareText className='mr-2' />
                         <p>Messages</p>
@@ -80,7 +76,7 @@ const Navbar = () => {
                         onClick={ logout }
                       >
                         <LogOut className='mr-2' />
-                        <p  >Logout</p>
+                        <p >Logout</p>
                       </div>
 
                     </div>

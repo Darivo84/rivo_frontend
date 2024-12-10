@@ -6,6 +6,7 @@ axios.defaults.withCredentials = true
 
 export const useAuthStore = create((set) => ({
   user: null,
+	professional: null,
 	isAuthenticated: false,
 	error: null,
 	isLoading: false,
@@ -16,7 +17,7 @@ export const useAuthStore = create((set) => ({
   signup: async (email, password, firstName, lastName, gender) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`http://localhost:5000/api/auth/user/signup`, { email, password, firstName, lastName, gender });
+			const response = await axios.post(`http://localhost:5000/api/user/register`, { email, password, firstName, lastName, gender });
 			// const response = await axios.post(`${API_URL}/auth/user/signup/signup`, { email, password, firstName, lastName, gender });
 			set({ user: response.data.user, isAuthenticated: true, isLoading: false });
 		} catch (error) {
@@ -28,7 +29,7 @@ export const useAuthStore = create((set) => ({
   login: async (email, password) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`http://localhost:5000/api/auth/user/login`, { email, password });
+			const response = await axios.post(`http://localhost:5000/api/user/login`, { email, password });
 			// const response = await axios.post(`${API_URL}/login`, { email, password });
 			set({
 				isAuthenticated: true,
@@ -45,7 +46,7 @@ export const useAuthStore = create((set) => ({
   logout: async () => {
 		set({ isLoading: true, error: null });
 		try {
-			await axios.post(`http://localhost:5000/api/auth/user/logout`);
+			await axios.post(`http://localhost:5000/api/user/logout`);
 			// await axios.post(`${API_URL}/logout`);
 			set({ user: null, isAuthenticated: false, error: null, isLoading: false });
 		} catch (error) {
@@ -57,7 +58,7 @@ export const useAuthStore = create((set) => ({
 	verifyEmail: async (code) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`http://localhost:5000/api/auth/user/verify-email`, { code });
+			const response = await axios.post(`http://localhost:5000/api/user/verify-email`, { code });
 			// const response = await axios.post(`${API_URL}/verify-email`, { code });
 			set({ user: response.data.user, isAuthenticated: true, isLoading: false });
 			return response.data;
@@ -70,7 +71,7 @@ export const useAuthStore = create((set) => ({
 	checkAuth: async () => {
 		set({ isCheckingAuth: true, error: null });
 		try {
-			const response = await axios.get(`http://localhost:5000/api/auth/user/check-auth`);
+			const response = await axios.get(`http://localhost:5000/api/user/check-auth`);
 			// const response = await axios.get(`${API_URL}/check-auth`);
 			set({ user: response.data.user, isAuthenticated: true, isCheckingAuth: false });
 		} catch (error) {
@@ -102,6 +103,34 @@ export const useAuthStore = create((set) => ({
 				isLoading: false,
 				error: error.response.data.message || "Error resetting password",
 			});
+			throw error;
+		}
+	},
+
+	// professional
+	pro_signup: async (email, password, firstName, lastName, gender) => {
+		set({ isLoading: true, error: null });
+		try {
+			const response = await axios.post(`http://localhost:5000/api/auth/pro/signup`, { email, password, firstName, lastName, gender });
+			set({ professional: response.data.professional, isAuthenticated: true, isLoading: false });
+		} catch (error) {
+			set({ error: error.response.data.message || "Error signing up", isLoading: false });
+			throw error;
+		}
+	},
+
+	pro_login: async (email, password) => {
+		set({ isLoading: true, error: null });
+		try {
+			const response = await axios.post(`http://localhost:5000/api/auth/pro/login`, { email, password });
+			set({
+				isAuthenticated: true,
+				user: response.data.user,
+				error: null,
+				isLoading: false,
+			});
+		} catch (error) {
+			set({ error: error.response?.data?.message || "Error logging in", isLoading: false });
 			throw error;
 		}
 	},

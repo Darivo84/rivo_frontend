@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+
+import {AppContext} from '../context/AppContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-
-import { professionals } from '../assets/assets'
 
 const Professionals = () => {
   const { speciality } = useParams()
   const [filter, setFilter] = useState([])
   const navigate = useNavigate()
+  const { professionals } = useContext(AppContext)
 
   const applyFilter = () => {
     if (speciality) {
@@ -39,7 +40,7 @@ const Professionals = () => {
           <div className='w-full grid grid-cols-auto gap-4 gap-y-6'>
             {filter.map((item, index) => (
               <div onClick={ () => navigate(`/appointment/${ item._id }`) } className='border border-green-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500' key={ index }>
-                <img className='bg-green-50' src={ item.profilePic } alt="img" />
+                <img className='bg-green-50' src={ item.image } alt="img" />
                 <div className='p-4'>
                   <div className='flex items-center gap-2 text-sm text-center text-green-500'>
                     <p className='size-2 bg-green-500 rounded-full'></p><p>Available</p>

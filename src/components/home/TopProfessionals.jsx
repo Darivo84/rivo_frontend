@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom'
-import { professionals } from '../../assets/assets'
+import { AppContext } from '../../context/AppContext'
+import { useContext } from 'react'
 
 const TopProfessionals = () => {
   const navigate = useNavigate()
+  const {professionals} = useContext(AppContext)
 
   return (
     <div className='mx-4 sm:mx-[10%]'>
@@ -12,7 +14,7 @@ const TopProfessionals = () => {
         <div className='w-full grid grid-cols-auto gap-4 pt-5 gap-y-6 px-3 sm:px-0'>
         { professionals.slice(0, 10).map((item, index) => (
           <div onClick={ () => { navigate(`/appointment/${ item._id }`); scrollTo(0,0) }} className='border border-primary-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500' key={ index }>
-            <img className='bg-blue-50 w-35 h-100' src={ item.profilePic } alt="" />
+            <img className='bg-blue-50 w-35 h-100' src={ item.image } alt="" />
             <div className='p-4'>
               <div className={ `flex items-center gap-2 text-sm text-center ${ item.available ? 'text-green-500' : 'text-red-500'} text-green-500` }>
                 <p className={ `w-2 h-2 ${ item.available ? 'bg-green-500': 'bg-red-500' }  rounded-full` }></p><p>{ item.available ? 'Available' : 'Not Available' }</p>

@@ -17,6 +17,7 @@ import ForgetPassword from './pages/user/ForgetPassword'
 import ResetPassword from './pages/user/ResetPassword'
 import Profile from './pages/user/Profile'
 import Messages from './pages/user/Messages'
+import MyAppointments from './pages/user/MyAppointments'
 
 import MyProfile from './pages/user/MyProfile'
 
@@ -122,6 +123,14 @@ function App() {
           element={ 
             <ProtectedRoute>
               <MyProfile /> 
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path='/user/my-appointments' 
+          element={ 
+            <ProtectedRoute>
+              <MyAppointments /> 
             </ProtectedRoute>
           } 
         />

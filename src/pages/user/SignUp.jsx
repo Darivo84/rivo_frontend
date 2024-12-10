@@ -30,7 +30,7 @@ const SignUp = () => {
     e.preventDefault()
 
     try {
-			await signup(email, password, firstName, lastName);
+			await signup(email, password, firstName, lastName, gender);
 			navigate("/user/verify-email")
 		} catch (error) {
 			console.log(error)

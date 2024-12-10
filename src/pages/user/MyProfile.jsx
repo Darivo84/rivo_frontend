@@ -11,12 +11,12 @@ import { formatDate } from '../../utils/date'
 import { ImageUp } from 'lucide-react'
 
 const MyProfile = () => {
-  const { user } = useAuthStore()
+  const { user, logout } = useAuthStore()
 
   const [userData, setUserData] = useState({
     firstName: user?.firstName,
     lastName: user?.lastName,
-    profilePic: user?.profilePic,
+    image: user?.image,
     email: user?.email,
     phone: user?.phone,
     address1: user?.address1,
@@ -30,7 +30,7 @@ const MyProfile = () => {
   })
 
   const [isEdit, setIsEdit] = useState(false)
-  const [profilePic, setProfilePic] = useState()
+  const [image, setImage] = useState()
 
   const handleLogout = () => {
     logout()
@@ -67,14 +67,14 @@ const MyProfile = () => {
                   ?
                   <label htmlFor="profilePic">
                     <div className='relative'>
-                      <img src={ profilePic ? URL.createObjectURL(profilePic) : userData.profilePic } alt="profilePic" />
+                      <img src={ image ? URL.createObjectURL(image) : userData.image } alt="profilePic" />
                       {/* <img src={ profilePic ? '': profilePic } alt="profilePic" /> */}
-                      {profilePic ? '' : <ImageUp className='size-12 absolute bottom-0 right-12 text-white cursor-pointer' />}
+                      {image ? '' : <ImageUp className='size-12 absolute bottom-0 right-12 text-white cursor-pointer' />}
                     </div>
-                    <input onChange={(e) => setProfilePic(e.target.files[0])} type="file" id='profilePic' hidden />
+                    <input onChange={(e) => setImage(e.target.files[0])} type="file" id='profilePic' hidden />
                   </label>
                   :
-                  <img className='w-36 rounded-full cursor-pointer' src={ userData.profilePic } alt="profilePic" />
+                  <img className='w-36 rounded-full cursor-pointer' src={ userData.image } alt="profilePic" />
               }
                 
                 
@@ -124,7 +124,6 @@ const MyProfile = () => {
                       ? <p className='ml-7'>{ userData.email }</p>
                       : <p className='ml-4'>{ userData.email }</p>
                     }
-                    {/* <p className='ml-7'>{ userData.email }</p> */}
                   </div>
                 
                 </div>
@@ -211,8 +210,6 @@ const MyProfile = () => {
                     >
                       <option 
                         value="Male" 
-                        // className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500'
-                        // className='bg-gray-800 bg-opacity-20 text-green-600 w-[320px] focus:ring-green-500 focus:border-green-500'
                       >
                         Male
                       </option>
@@ -221,15 +218,6 @@ const MyProfile = () => {
                       >
                         Female
                       </option>
-                    {/* <div className='flex flex-col items-center justify-evenly'>
-                      <input 
-                        type="text" 
-                        placeholder='Your gender'
-                        value={userData.gender}
-                        onChange={(e) => setUserData(prev => ({ ...prev, gender: e.target.value }))}
-                        className='ml-2 mb-3 bg-white bg-opacity-20 text-white w-[320px] rounded-md h-[30px] px-2' 
-                      />    
-                    </div> */}
                     </select>
                     : 
                     <div>
@@ -359,7 +347,7 @@ const MyProfile = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={handleLogout}
+              onClick={logout}
               className='w-full py-3 px-4 bg-gradient-to-r from-red-500 to-red-600 text-white 
             font-bold rounded-lg shadow-lg hover:from-red-600 hover:to-red-700
             focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900'
